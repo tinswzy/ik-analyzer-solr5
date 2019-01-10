@@ -465,7 +465,7 @@ public class IKQueryExpressionParser {
 			return null;
 		}
 		
-		BooleanQuery resultQuery = new BooleanQuery();
+		BooleanQuery.Builder resultQuery = new BooleanQuery.Builder();
 
 		if(this.querys.size() == 1){
 			return this.querys.get(0);
@@ -476,9 +476,9 @@ public class IKQueryExpressionParser {
 		if('&' == op.type){
 			if(q1 != null){
 				if(q1 instanceof BooleanQuery){
-					BooleanClause[] clauses = ((BooleanQuery)q1).getClauses();
-					if(clauses.length > 0 
-							&& clauses[0].getOccur() == Occur.MUST){
+					List<BooleanClause> clauses = ((BooleanQuery)q1).clauses();
+					if(clauses.size() > 0
+							&& clauses.get(0).getOccur() == Occur.MUST){
 						for(BooleanClause c : clauses){
 							resultQuery.add(c);
 						}					
@@ -497,9 +497,9 @@ public class IKQueryExpressionParser {
 			
 			if(q2 != null){
 				if(q2 instanceof BooleanQuery){
-					BooleanClause[] clauses = ((BooleanQuery)q2).getClauses();
-					if(clauses.length > 0 
-							&& clauses[0].getOccur() == Occur.MUST){
+					List<BooleanClause> clauses = ((BooleanQuery)q2).clauses();
+					if(clauses.size() > 0
+							&& clauses.get(0).getOccur() == Occur.MUST){
 						for(BooleanClause c : clauses){
 							resultQuery.add(c);
 						}					
@@ -519,9 +519,9 @@ public class IKQueryExpressionParser {
 		}else if('|' == op.type){
 			if(q1 != null){
 				if(q1 instanceof BooleanQuery){
-					BooleanClause[] clauses = ((BooleanQuery)q1).getClauses();
-					if(clauses.length > 0 
-							&& clauses[0].getOccur() == Occur.SHOULD){
+					List<BooleanClause> clauses = ((BooleanQuery)q1).clauses();
+					if(clauses.size() > 0
+							&& clauses.get(0).getOccur() == Occur.SHOULD){
 						for(BooleanClause c : clauses){
 							resultQuery.add(c);
 						}					
@@ -540,9 +540,9 @@ public class IKQueryExpressionParser {
 			
 			if(q2 != null){
 				if(q2 instanceof BooleanQuery){
-					BooleanClause[] clauses = ((BooleanQuery)q2).getClauses();
-					if(clauses.length > 0 
-							&& clauses[0].getOccur() == Occur.SHOULD){
+					List<BooleanClause> clauses = ((BooleanQuery)q2).clauses();
+					if(clauses.size() > 0
+							&& clauses.get(0).getOccur() == Occur.SHOULD){
 						for(BooleanClause c : clauses){
 							resultQuery.add(c);
 						}					
@@ -565,8 +565,8 @@ public class IKQueryExpressionParser {
 			}
 			
 			if(q1 instanceof BooleanQuery){
-				BooleanClause[] clauses = ((BooleanQuery)q1).getClauses();
-				if(clauses.length > 0){
+				List<BooleanClause> clauses = ((BooleanQuery)q1).clauses();
+				if(clauses.size() > 0){
 					for(BooleanClause c : clauses){
 						resultQuery.add(c);
 					}					
@@ -584,7 +584,7 @@ public class IKQueryExpressionParser {
 			
 			resultQuery.add(q2,Occur.MUST_NOT);
 		}
-		return resultQuery;
+		return resultQuery.build();
 	}	
 	
 	/**
